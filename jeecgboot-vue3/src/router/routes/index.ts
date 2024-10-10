@@ -64,5 +64,14 @@ export const TokenLoginRoute: AppRouteRecordRaw = {
     ignoreAuth: true,
   },
 };
+
+export const TestRoute: AppRouteRecordRaw = {
+  path: '/test',
+  name: 'Test',
+  component: () => import('/@/views/page/Test.vue'),
+  meta: {
+    title: '测试页面',
+  },
+};
 // Basic routing without permission
-export const basicRoutes = [LoginRoute, RootRoute, ...mainOutRoutes, REDIRECT_ROUTE, PAGE_NOT_FOUND_ROUTE, TokenLoginRoute, Oauth2LoginRoute];
+export const basicRoutes = [LoginRoute, RootRoute, ...mainOutRoutes, REDIRECT_ROUTE, PAGE_NOT_FOUND_ROUTE, TokenLoginRoute, Oauth2LoginRoute, TestRoute];

@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 9090
   tomcat:
     max-swallow-size: -1
   error:
@@ -7,6 +7,7 @@ server:
     include-stacktrace: ALWAYS
     include-message: ALWAYS
   servlet:
+#    /jeecg-boot
     context-path: /jeecg-boot
   compression:
     enabled: true
@@ -143,7 +144,7 @@ spring:
         timeBetweenEvictionRunsMillis: 60000
         # 配置一个连接在池中最小生存的时间，单位是毫秒
         minEvictableIdleTimeMillis: 300000
-        validationQuery: SELECT 1
+        validationQuery: SELECT 1 FROM DUAL
         testWhileIdle: true
         testOnBorrow: false
         testOnReturn: false
@@ -163,14 +164,19 @@ spring:
         master:
           url: jdbc:mysql://127.0.0.1:3306/jeecg-boot?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
           username: root
-          password: root
+          password: 123456
           driver-class-name: com.mysql.cj.jdbc.Driver
           # 多数据源配置
-          #multi-datasource1:
-          #url: jdbc:mysql://localhost:3306/jeecg-boot2?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
-          #username: root
-          #password: root
-          #driver-class-name: com.mysql.cj.jdbc.Driver
+        multi-datasource1:
+          url: jdbc:oracle:thin:@10.96.28.108:1521/zsc_nhis_gx
+          username: zsc_nhis_gx
+          password: zsc_nhis_gx
+          driver-class-name: oracle.jdbc.OracleDriver
+        multi-datasource2:
+          url: jdbc:oracle:thin:@10.96.28.108:1521/zsc_psc_gx
+          username: zsc_psc_gx
+          password: zsc_psc_gx
+          driver-class-name: oracle.jdbc.OracleDriver
   #redis 配置
   redis:
     database: 0
@@ -190,7 +196,7 @@ mybatis-plus:
       table-underline: true
   configuration:
     # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
-    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     # 返回类型为Map,显示null对应的字段
     call-setters-on-nulls: true
 #jeecg专用配置
