@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.api.mapper.HisPatientMapper">
+
+
+    <select id="getAppPatients" resultType="java.util.Map">
+        select sr.CODE, sr.NAME, pm.NAME_PI, to_char(sa.DATE_APPT, 'yyyy-mm-dd') DATE_APPT
+        from SCH_APPT sa
+                 left join SCH_RESOURCE sr on sa.PK_SCHRES = sr.PK_SCHRES
+                 left join PI_MASTER pm on pm.PK_PI = sa.PK_PI
+        where sr.CODE = #{code}
+    </select>
+    <select id="getAppPatientByPkPi" resultType="java.util.Map">
+        with dict as (
+            select name,CODE from BD_DEFDOC where code_defdoclist='020100'
+        )
+        select dict.NAME apptype,sr.CODE,appt.PK_SCHAPPT,appt.PK_PI,
+               dept.CODE_DEPT,
+               appt.PK_SCHAPPT,
+               pm.NAME_PI,
+               pm.DT_SEX,
+               to_char(pm.BIRTH_DATE, 'yyyy-mm-dd') BIRTH_DATE
+                ,pm.MOBILE
+                ,pm.ID_NO
+        ,to_char(appt.DATE_APPT,'yyyy-mm-dd') DATE_APPT
+        from SCH_APPT appt
+                 left join BD_OU_DEPT dept on dept.PK_DEPT = appt.PK_DEPT_EX
+                 left join PI_MASTER pm on pm.PK_PI = appt.PK_PI
+                 left join SCH_RESOURCE sr on sr.PK_SCHRES = appt.PK_SCHRES
+                 left join dict on dict.CODE = appt.DT_APPTYPE
+        where appt.EU_STATUS = '0'
+          and appt.DEL_FLAG = '0'
+          and appt.PK_PI = #{pkPi}
+
+          and to_char(appt.DATE_APPT,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd')
+        order by appt.DATE_APPT desc
+    </select>
+    <select id="getWaitingPatients" resultType="java.util.Map">
+
+    </select>
+    <select id="getDoctorSchedule" resultType="java.util.Map">
+        select sch.PK_SCH,
+        res.PK_SCHRES,
+        res.PK_EMP,
+        emp.NAME_EMP,
+        emp.CODE_EMP,
+        dept.NAME_DEPT,
+        slot.NAME_DATESLOT,
+        sch.CNT_TOTAL,
+        sch.CNT_USED
+        from SCH_SCH sch
+        inner join SCH_RESOURCE res on res.PK_SCHRES = sch.PK_SCHRES
+        inner join BD_OU_EMPLOYEE emp on emp.PK_EMP = res.PK_EMP
+        inner join BD_OU_DEPT dept on dept.PK_DEPT = sch.PK_DEPT
+        inner join BD_CODE_DATESLOT slot on slot.PK_DATESLOT = sch.PK_DATESLOT
+        where to_char(DATE_WORK, 'yyyy-mm-dd') = to_char(sysdate, 'yyyy-mm-dd')
+        and dept.CODE_DEPT in
+        <foreach item="deptCode" collection="deptCodeList" open="(" separator="," close=")">
+            #{deptCode}
+        </foreach>
+        and slot.NAME_DATESLOT =
+        (case
+        when to_number(to_char(sysdate, 'HH24')) &lt; 12 then '上午'
+        else '下午'
+        end)
+    </select>
+
+    <select id="getDepartmentAppointments" resultType="java.util.Map">
+        with dict as (
+            select name,CODE from BD_DEFDOC where code_defdoclist='020100'
+        )
+        select sa.PK_SCHAPPT id, pm.NAME_PI, emp.NAME_EMP,dept.NAME_DEPT,
+               CASE
+                   WHEN pm.DT_SEX = 02 THEN '男'
+                   ELSE '女'
+                   END AS gender,pm.MOBILE,pm.ID_NO,to_char(sa.DATE_APPT, 'yyyy-mm-dd') DATE_APPT,
+               dict.NAME APPTYPE
+        from SCH_APPT sa
+                 left join BD_OU_DEPT dept on dept.PK_DEPT = sa.PK_DEPT_EX
+                 left join PI_MASTER pm on pm.PK_PI = sa.PK_PI
+                 left join SCH_RESOURCE sr on sr.PK_SCHRES = sa.PK_SCHRES
+                 left join BD_OU_EMPLOYEE emp on emp.PK_EMP = sr.PK_EMP
+                 left join dict on dict.CODE = sa.DT_APPTYPE
+        where to_char(sa.DATE_APPT, 'yyyy-mm-dd') = to_char(sysdate, 'yyyy-mm-dd')
+          and sa.FLAG_CANCEL = '0'
+          and dept.CODE_DEPT = #{codeDept}
+    </select>
+</mapper>

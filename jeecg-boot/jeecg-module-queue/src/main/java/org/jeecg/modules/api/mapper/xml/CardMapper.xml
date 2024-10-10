@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.api.mapper.CardMapper">
+
+
+    <select id="getCardNo" resultType="java.util.Map">
+
+        SELECT cr.code_reg cardRegCode,
+               pi.id_no credentialNo,
+               cr.name_reg regName,
+               cr.dt_sex sex,
+               cr.birth_day birthDay,
+               cr.tel_no teleNo,
+               cr.mpi mpi,
+               cr.pk_pi,
+               cr.address_code addressCode,
+               cr.detailed_address detailedAddress,
+               cr.postcode postCode,
+               cc.card_no cardNo,
+               cc.status cardStatus,
+               cc.create_time createtime
+        FROM card_reginfo cr
+                 left join VIEW_HIS_PI_MASTER pi on cr.pk_pi = pi.pk_pi
+                 left join card_e_card cc on cr.pk_reginfo = cc.pk_reginfo
+        where cc.card_no =  #{cardNo}
+
+    </select>
+</mapper>

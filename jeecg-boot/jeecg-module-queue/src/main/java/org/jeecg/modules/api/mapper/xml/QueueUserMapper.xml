@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.api.mapper.QueueUserMapper">
+
+    <select id="getSysUserList" resultType="java.util.Map">
+        select su.id userid, su.username, su.realname, dept.id pkDept, dept.depart_name nameDept
+        from sys_user su
+
+                 inner join sys_user_depart sud on su.id = sud.user_id
+                 inner join sys_depart dept on sud.dep_id = dept.id
+        where username = #{code}
+    </select>
+    <select id="getSysDeptList" resultType="java.util.Map">
+        select *
+        from sys_depart
+        where id = #{id}
+    </select>
+    <select id="getSysDeptId" resultType="java.util.Map">
+        select *
+        from sys_depart
+        where memo = #{code}
+    </select>
+    <select id="getSysDeptListByids" resultType="java.util.Map">
+        SELECT * FROM sys_depart
+        WHERE memo is not null and id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    <select id="getSignDeptList" resultType="java.util.Map">
+        SELECT d.depart_name,
+               d.id,
+               d.memo
+        FROM check_machine cm
+                 JOIN
+             sys_depart d ON FIND_IN_SET(d.id, cm.signable_dept) > 0
+        WHERE cm.mac_address = #{mac}
+    </select>
+    <select id="getRoomListByDeptId" resultType="java.util.Map">
+        select room.room_number, su.realname, room.id, dd.doctor
+        from rooms room
+                 left join doctor_device dd on dd.room = room.id
+                 left join sys_user su on su.id = dd.doctor
+        where room.department = #{id}
+    </select>
+    <select id="getDoctorQueueList" resultType="java.util.Map">
+        SELECT
+            qu.id,
+            qu.queue_number,
+            qu.patient,
+            qu.queue_status,
+            qu.queue_priority,
+            qu.check_time,
+            pa.name,
+            CASE
+                WHEN pa.gender = 1 THEN '男'
+                ELSE '女'
+                END AS gender,
+            TIMESTAMPDIFF(YEAR, pa.date_birth, CURDATE()) AS age
+        FROM
+            queues qu
+                LEFT JOIN
+            patients pa ON pa.id = qu.patient
+
+        where qu.doctor = #{id}
+    </select>
+
+</mapper>
