@@ -23,7 +23,7 @@ import lombok.experimental.Accessors;
 /**
  * @Description: 患者信息
  * @Author: jeecg-boot
- * @Date:   2024-10-05
+ * @Date:   2024-10-10
  * @Version: V1.0
  */
 @Data
@@ -66,12 +66,6 @@ public class Patients implements Serializable {
 	@Dict(dicCode = "sex")
     @ApiModelProperty(value = "性别")
     private java.lang.String gender;
-	/**出生日期*/
-	@Excel(name = "出生日期", width = 15, format = "yyyy-MM-dd")
-	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    @ApiModelProperty(value = "出生日期")
-    private java.util.Date dateBirth;
 	/**电话*/
 	@Excel(name = "电话", width = 15)
     @ApiModelProperty(value = "电话")
@@ -115,4 +109,8 @@ public class Patients implements Serializable {
 	@Dict(dictTable = "rooms", dicText = "room_number", dicCode = "id")
     @ApiModelProperty(value = "诊室")
     private java.lang.String room;
+	/**预约时间段*/
+	@Excel(name = "预约时间段", width = 15)
+    @ApiModelProperty(value = "预约时间段")
+    private java.lang.String appointmentTimeSlot;
 }

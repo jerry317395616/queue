@@ -20,7 +20,6 @@
                   <input  placeholder="请输入性别" v-model="model.gender"/>
                 </view>
               </view>
-              <my-date label="出生日期：" fields="day" v-model="model.dateBirth" placeholder="请输入出生日期"></my-date>
               <view class="cu-form-group">
                 <view class="flex align-center">
                   <view class="title"><text space="ensp">电话：</text></view>
@@ -63,6 +62,12 @@
                 <view class="flex align-center">
                   <view class="title"><text space="ensp">诊室：</text></view>
                   <input  placeholder="请输入诊室" v-model="model.room"/>
+                </view>
+              </view>
+              <view class="cu-form-group">
+                <view class="flex align-center">
+                  <view class="title"><text space="ensp">预约时间段：</text></view>
+                  <input  placeholder="请输入预约时间段" v-model="model.appointmentTimeSlot"/>
                 </view>
               </view>
 				<view class="padding">

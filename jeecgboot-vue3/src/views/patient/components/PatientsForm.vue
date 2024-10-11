@@ -15,11 +15,6 @@
 							</a-form-item>
 						</a-col>
 						<a-col :span="24">
-							<a-form-item label="出生日期" v-bind="validateInfos.dateBirth" id="PatientsForm-dateBirth" name="dateBirth">
-								<a-date-picker placeholder="请选择出生日期"  v-model:value="formData.dateBirth" value-format="YYYY-MM-DD"  style="width: 100%"  allow-clear />
-							</a-form-item>
-						</a-col>
-						<a-col :span="24">
 							<a-form-item label="电话" v-bind="validateInfos.phone" id="PatientsForm-phone" name="phone">
 								<a-input v-model:value="formData.phone" placeholder="请输入电话"  allow-clear ></a-input>
 							</a-form-item>
@@ -64,6 +59,11 @@
 								<j-search-select v-model:value="formData.room" dict="rooms,room_number,id"  allow-clear />
 							</a-form-item>
 						</a-col>
+						<a-col :span="24">
+							<a-form-item label="预约时间段" v-bind="validateInfos.appointmentTimeSlot" id="PatientsForm-appointmentTimeSlot" name="appointmentTimeSlot">
+								<a-input v-model:value="formData.appointmentTimeSlot" placeholder="请输入预约时间段"  allow-clear ></a-input>
+							</a-form-item>
+						</a-col>
           </a-row>
         </a-form>
       </template>
@@ -93,7 +93,6 @@
     id: '',
     name: '',   
     gender: '',   
-    dateBirth: '',   
     phone: '',   
     idNumber: '',   
     doctor: '',   
@@ -103,6 +102,7 @@
     appId: '',   
     department: '',   
     room: '',   
+    appointmentTimeSlot: '',   
   });
   const { createMessage } = useMessage();
   const labelCol = ref<any>({ xs: { span: 24 }, sm: { span: 5 } });
@@ -112,7 +112,6 @@
   const validatorRules = reactive({
     name: [{ required: true, message: '请输入患者姓名!'},],
     gender: [{ required: true, message: '请输入性别!'},],
-    dateBirth: [{ required: true, message: '请输入出生日期!'},],
     phone: [{ required: true, message: '请输入电话!'},],
     idNumber: [{ required: true, message: '请输入身份证!'},],
   });

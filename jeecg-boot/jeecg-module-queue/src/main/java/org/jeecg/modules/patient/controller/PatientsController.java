@@ -42,7 +42,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
  /**
  * @Description: 患者信息
  * @Author: jeecg-boot
- * @Date:   2024-10-05
+ * @Date:   2024-10-10
  * @Version: V1.0
  */
 @Api(tags="患者信息")

@@ -40,6 +40,12 @@ export const columns: BasicColumn[] = [
     },
   },
   {
+    title: '预约时段',
+    align: "center",
+    dataIndex: 'APPOINT_TIME'
+  },
+
+  {
     title: '预约类型',
     align: "center",
     dataIndex: 'APPTYPE'

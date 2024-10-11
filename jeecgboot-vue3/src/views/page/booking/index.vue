@@ -86,8 +86,9 @@
   import PatientsModal from './components/IndexModal.vue';
   import { useUserStore } from '/@/store/modules/user';
   import JSearchSelect from '/@/components/Form/src/jeecg/components/JSearchSelect.vue';
-  import axios from "axios";
-
+  import axios from 'axios';
+  import { useMessage } from '@/hooks/web/useMessage';
+  const { createSuccessModal } = useMessage();
   const formRef = ref();
   const queryParam = reactive<any>({});
   const toggleSearchStatus = ref<boolean>(false);
@@ -140,10 +141,14 @@
    * 签到事件
    */
   function handleSign(record: Recordable) {
-    console.log(JSON.stringify(record))
-    axios.post('/jeecgboot/api/doctor/getWaitList', { codeDept: departmentCode }).then(res=>{
+    console.log(JSON.stringify(record));
+    axios.post('/jeecgboot/api/doctor/nurseSign', { record }).then((res) => {
 
-    })
+      createSuccessModal({
+        title: '提示',
+        content: res.data.message,
+      });
+    });
   }
 
   /**

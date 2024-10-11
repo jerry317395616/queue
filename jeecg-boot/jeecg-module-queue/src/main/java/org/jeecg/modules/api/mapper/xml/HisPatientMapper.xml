@@ -69,7 +69,8 @@
         with dict as (
             select name,CODE from BD_DEFDOC where code_defdoclist='020100'
         )
-        select sa.PK_SCHAPPT id, pm.NAME_PI, emp.NAME_EMP,dept.NAME_DEPT,
+        select sa.PK_SCHAPPT id, pm.NAME_PI, emp.NAME_EMP,dept.NAME_DEPT,emp.CODE_EMP,dept.CODE_DEPT,
+               substr(sa.APPOINT_TIME_STR, 12) as APPOINT_TIME,
                CASE
                    WHEN pm.DT_SEX = 02 THEN '男'
                    ELSE '女'

@@ -470,7 +470,7 @@ public class ApiTest {
         } else {
             patients.setGender("2");
         }
-        patients.setDateBirth(DateUtils.parseDate(birthDay, "yyyy-MM-dd"));
+
         patients.setPhone(teleNo);
         patients.setAppDate(new Date());
         patients.setCheckTime(new Date());
@@ -560,7 +560,8 @@ public class ApiTest {
      */
     @PostMapping("/nurseSign")
     public Result nurseSign(@RequestBody String json) throws ParseException {
-        JSONObject param = JSONObject.parseObject(json);
+        JSONObject record = JSONObject.parseObject(json);
+        JSONObject param = record.getJSONObject("record");
         Date checkTime = new Date();
         Patients patients = new Patients();
         patients.setName(param.getString("NAME_PI"));
@@ -571,8 +572,51 @@ public class ApiTest {
         patients.setAppId(param.getString("ID"));
         patients.setIdNumber(param.getString("ID_NO"));
         patients.setCheckTime(checkTime);
+        //查询医生和科室
+        String codeEmp = param.getString("CODE_EMP");
+        String codeDept = param.getString("CODE_DEPT");
+        //医生id
+        List<Map<String,Object>> doctorList = sysUserServie.getSysUserList(codeEmp);
+        if(ObjectUtils.isEmpty(doctorList)){
+            return Result.error("没有查询到医生信息");
+        }
+        String doctorId = doctorList.get(0).get("userid").toString();
+        //科室id
+        String deptId = sysUserServie.getDeptId(codeDept);
+        //诊室信息
+        QueryWrapper<DoctorDevice> doctorDeviceQueryWrapper = new QueryWrapper<>();
+        doctorDeviceQueryWrapper.eq("doctor",doctorId);
+        doctorDeviceQueryWrapper.eq("status","在线");
+        List<DoctorDevice> doctorDeviceList = doctorDeviceService.list(doctorDeviceQueryWrapper);
+        if(!ObjectUtils.isEmpty(doctorDeviceList)){
+            String room = doctorDeviceList.get(0).getRoom();
+            patients.setRoom(room);
+        }
+        patients.setDoctor(doctorId);
+        patients.setDepartment(deptId);
+        patientsService.save(patients);
+        //添加到队列
+        Queues queues = new Queues();
+        queues.setPatient(patients.getId());
+        // Retrieve the current maximum queueNumber
+        QueryWrapper<Queues> queueQueryWrapper = new QueryWrapper<>();
+        queueQueryWrapper.eq("doctor",doctorId);
+        queueQueryWrapper.select("MAX(queue_number) as maxQueueNumber");
+        Map<String, Object> result = queuesService.getMap(queueQueryWrapper);
 
-        return null;
+        // Extract the maxQueueNumber and increment it
+        Integer maxQueueNumber = 0;
+        if (result != null && result.get("maxQueueNumber") != null) {
+            maxQueueNumber = Integer.valueOf(result.get("maxQueueNumber").toString());
+        }
+        queues.setQueueNumber(maxQueueNumber + 1);
+        queues.setDepartment(deptId);
+        queues.setQueueStatus("等待中");
+        queues.setQueuePriority("普通");
+        queues.setCheckTime(checkTime);
+        queues.setDoctor(doctorId);
+        queuesService.save(queues);
+        return Result.ok(queues);
     }
 
 
@@ -652,7 +696,7 @@ public class ApiTest {
         } else {
             patients.setGender("2");
         }
-        patients.setDateBirth(DateUtils.parseDate(brithDate, "yyyy-MM-dd"));
+
         patients.setPhone(mobile);
         patients.setAppDate(DateUtils.parseDate(dateAppt, "yyyy-MM-dd"));
         patients.setCheckTime(checkDate);
