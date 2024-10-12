@@ -11,18 +11,24 @@
         where sr.CODE = #{code}
     </select>
     <select id="getAppPatientByPkPi" resultType="java.util.Map">
-        with dict as (
-            select name,CODE from BD_DEFDOC where code_defdoclist='020100'
-        )
-        select dict.NAME apptype,sr.CODE,appt.PK_SCHAPPT,appt.PK_PI,
+        with dict as (select name, CODE
+                      from BD_DEFDOC
+                      where code_defdoclist = '020100')
+        select dict.NAME                             apptype,
+               sr.CODE,
+               appt.PK_SCHAPPT,
+               appt.PK_PI,
                dept.CODE_DEPT,
                appt.PK_SCHAPPT,
                pm.NAME_PI,
                pm.DT_SEX,
-               to_char(pm.BIRTH_DATE, 'yyyy-mm-dd') BIRTH_DATE
-                ,pm.MOBILE
-                ,pm.ID_NO
-        ,to_char(appt.DATE_APPT,'yyyy-mm-dd') DATE_APPT
+               to_char(pm.BIRTH_DATE, 'yyyy-mm-dd')  BIRTH_DATE
+                ,
+               pm.MOBILE
+                ,
+               pm.ID_NO
+                ,
+               to_char(appt.DATE_APPT, 'yyyy-mm-dd') DATE_APPT
         from SCH_APPT appt
                  left join BD_OU_DEPT dept on dept.PK_DEPT = appt.PK_DEPT_EX
                  left join PI_MASTER pm on pm.PK_PI = appt.PK_PI
@@ -32,7 +38,7 @@
           and appt.DEL_FLAG = '0'
           and appt.PK_PI = #{pkPi}
 
-          and to_char(appt.DATE_APPT,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd')
+          and to_char(appt.DATE_APPT, 'yyyy-mm-dd') = to_char(sysdate, 'yyyy-mm-dd')
         order by appt.DATE_APPT desc
     </select>
     <select id="getWaitingPatients" resultType="java.util.Map">
@@ -66,16 +72,24 @@
     </select>
 
     <select id="getDepartmentAppointments" resultType="java.util.Map">
-        with dict as (
-            select name,CODE from BD_DEFDOC where code_defdoclist='020100'
-        )
-        select sa.PK_SCHAPPT id, pm.NAME_PI, emp.NAME_EMP,dept.NAME_DEPT,emp.CODE_EMP,dept.CODE_DEPT,
-               substr(sa.APPOINT_TIME_STR, 12) as APPOINT_TIME,
+        with dict as (select name, CODE
+                      from BD_DEFDOC
+                      where code_defdoclist = '020100')
+        select sa.PK_SCHAPPT                       id,
+               pm.NAME_PI,
+               emp.NAME_EMP,
+               dept.NAME_DEPT,
+               emp.CODE_EMP,
+               dept.CODE_DEPT,
+               substr(sa.APPOINT_TIME_STR, 12) as  APPOINT_TIME,
                CASE
                    WHEN pm.DT_SEX = 02 THEN '男'
                    ELSE '女'
-                   END AS gender,pm.MOBILE,pm.ID_NO,to_char(sa.DATE_APPT, 'yyyy-mm-dd') DATE_APPT,
-               dict.NAME APPTYPE
+                   END                         AS  gender,
+               pm.MOBILE,
+               pm.ID_NO,
+               to_char(sa.DATE_APPT, 'yyyy-mm-dd') DATE_APPT,
+               dict.NAME                           APPTYPE
         from SCH_APPT sa
                  left join BD_OU_DEPT dept on dept.PK_DEPT = sa.PK_DEPT_EX
                  left join PI_MASTER pm on pm.PK_PI = sa.PK_PI
@@ -85,5 +99,36 @@
         where to_char(sa.DATE_APPT, 'yyyy-mm-dd') = to_char(sysdate, 'yyyy-mm-dd')
           and sa.FLAG_CANCEL = '0'
           and dept.CODE_DEPT = #{codeDept}
+    </select>
+    <select id="getHisEmp" resultType="java.util.Map">
+        select emp.NAME_EMP, emp.CODE_EMP, emp.MOBILE, dept.CODE_DEPT, dept.NAME_DEPT
+        from BD_OU_EMPLOYEE emp
+        left join BD_OU_EMPJOB job on job.PK_EMP = emp.PK_EMP
+        left join BD_OU_DEPT dept on dept.PK_DEPT = job.PK_DEPT
+        where emp.DEL_FLAG = '0'
+        <if test="codeEmp != null and codeEmp != ''">
+            AND emp.CODE_EMP = #{codeEmp}
+        </if>
+        <if test="name != null and name != ''">
+            AND emp.NAME_EMP LIKE '%' || #{name} || '%'
+        </if>
+        <if test="phone != null and phone != ''">
+            AND emp.MOBILE = #{phone}
+        </if>
+    </select>
+    <select id="getHisDept" resultType="java.util.Map">
+        SELECT
+        CODE_DEPT,
+        NAME_DEPT
+        FROM
+        BD_OU_DEPT dept
+        WHERE
+        DEL_FLAG = '0'
+        <if test="nameDept != null and nameDept != ''">
+            AND NAME_DEPT LIKE '%' || #{nameDept} || '%'
+        </if>
+        <if test="codeDept != null and codeDept != ''">
+            AND CODE_DEPT = #{codeDept}
+        </if>
     </select>
 </mapper>

@@ -1014,5 +1014,59 @@ public class ApiTest {
         return Result.OK(result);
     }
 
+    /**
+     * 获取HIS人员信息
+     * @param param
+     * @return
+     */
+    @PostMapping("/getHisEmp")
+    public Result<List<Map<String,Object>>> getHisEmp(@RequestBody String param){
+        JSONObject paramObj = JSONObject.parseObject(param);
+        String codeEmp = paramObj.getString("code");
+        String name = paramObj.getString("name");
+        String mobile = paramObj.getString("phone");
+        List<Map<String, Object>> result = hisPatientService.getHisEmp(codeEmp,name,mobile);
+        return Result.OK(result);
+    }
+
+
+    /**
+     * 获取HIS科室信息
+     * @param param
+     * @return
+     */
+    @PostMapping("/getHisDept")
+    public Result<List<Map<String,Object>>> getHisDept(@RequestBody String param){
+        JSONObject paramObj = JSONObject.parseObject(param);
+        String codeEmp = paramObj.getString("codeDept");
+        String nameDept = paramObj.getString("nameDept");
+        List<Map<String, Object>> result = hisPatientService.getHisDept(codeEmp,nameDept);
+        return Result.OK(result);
+    }
+
+    /**
+     * 同步医生信息
+     * @return
+     */
+    public Result syncDoctor(){
+        return Result.OK("");
+    }
+
+    /**
+     * 同步科室信息
+     * @return
+     */
+    public Result syncDept(@RequestBody String json){
+        JSONObject record = JSONObject.parseObject(json);
+        JSONObject param = record.getJSONObject("record");
+        String codeDept = param.getString("codeDept");
+        //查询科室信息
+        List<Map<String,Object>> deptList = sysUserServie.getSysDeptListByCode(codeDept);
+        if(ObjectUtils.isEmpty(deptList)){
+            //新增科室
+
+        }
+        return Result.OK("");
+    }
 
 }

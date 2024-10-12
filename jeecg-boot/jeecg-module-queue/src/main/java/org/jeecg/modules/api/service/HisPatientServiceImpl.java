@@ -2,6 +2,7 @@ package org.jeecg.modules.api.service;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
 
+import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.api.mapper.HisPatientMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,5 +50,27 @@ public class HisPatientServiceImpl{
      */
     public List<Map<String, Object>> getAppPatientById(String id) {
         return hisPatientMapper.getAppPatientByPkPi(id);
+    }
+
+    /**
+     * 获取his人员信息
+     * @param codeEmp
+     * @param name
+     * @param mobile
+     * @return
+     */
+    public List<Map<String,Object>> getHisEmp(String codeEmp,String name,String mobile){
+        return hisPatientMapper.getHisEmp(codeEmp,name,mobile);
+    }
+
+
+    /**
+     * 获取HIS科室信息
+     * @param codeEmp
+     * @param nameDept
+     * @return
+     */
+    public List<Map<String,Object>> getHisDept(String codeEmp,String nameDept){
+        return hisPatientMapper.getHisDept(codeEmp,nameDept);
     }
 }

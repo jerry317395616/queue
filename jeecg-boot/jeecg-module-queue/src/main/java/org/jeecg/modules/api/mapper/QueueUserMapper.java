@@ -29,6 +29,12 @@ public interface QueueUserMapper {
     List<Map<String,Object>> getDoctorQueueList(@Param("id") String id);
 
 
+    /**
+     * 根据科室编码查询科室信息
+     * @param codeDept
+     * @return
+     */
+    List<Map<String,Object>> getSysDeptListByCode(@Param("codeDept") String codeDept);
 
 
 

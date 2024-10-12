@@ -64,5 +64,8 @@
 
         where qu.doctor = #{id}
     </select>
+    <select id="getSysDeptListByCode" resultType="java.util.Map">
+        select * from sys_depart where memo = #{codeDept}
+    </select>
 
 </mapper>

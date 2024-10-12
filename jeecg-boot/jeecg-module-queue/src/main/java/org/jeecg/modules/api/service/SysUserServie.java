@@ -46,6 +46,13 @@ public class SysUserServie {
     }
 
 
-
+    /**
+     * 根据科室编码查询科室信息
+     * @param codeDept
+     * @return
+     */
+    public List<Map<String,Object>> getSysDeptListByCode(String codeDept){
+        return sysUserMapper.getSysDeptList(codeDept);
+    }
 
 }

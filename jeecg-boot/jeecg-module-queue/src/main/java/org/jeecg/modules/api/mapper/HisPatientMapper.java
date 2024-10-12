@@ -34,4 +34,21 @@ public interface HisPatientMapper {
      * @return
      */
     List<Map<String,Object>> getDepartmentAppointments(@Param("codeDept") String codeDept);
+
+    /**
+     * 获取HIS中的人员信息
+     * @param codeEmp
+     * @return
+     */
+    List<Map<String,Object>> getHisEmp(@Param("codeEmp") String codeEmp,@Param("name") String name,@Param("phone") String phone);
+
+
+    /**
+     * 获取HIS中的科室
+     * @param codeEmp
+     * @param nameDept
+     * @return
+     */
+    List<Map<String,Object>> getHisDept(@Param("codeDept") String codeEmp,@Param("nameDept") String nameDept);
+
 }
