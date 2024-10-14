@@ -4,7 +4,7 @@
   import axios from 'axios';
   import { useUserStore } from '@/store/modules/user';
   import { getDeptList } from '@/views/page/triage/index.api';
-  import TabDept from "@/views/page/triage/components/TabDept.vue";
+  import TabDept from '@/views/page/triage/components/TabDept.vue';
   const activeKey = ref('1');
   const rooms = ref<{ room_number: string; realname: string }[]>([]);
   const deptList = ref<any>(null); // 定义 deptList 变量
@@ -17,17 +17,19 @@
       frame
         .GetMac()
         .then((res) => {
-          console.log('客户端返回',res)
-          let param = JSON.parse(res)
-          let mac = param.mac
-          let ip = param.ip
-          console.log('客户端mac',mac)
-          console.log('客户端ip',ip)
+          console.log('客户端返回', res);
+          let param = JSON.parse(res);
+          let mac = param.mac;
+          let ip = param.ip;
+          console.log('客户端mac', mac);
+          console.log('客户端ip', ip);
 
           getDeptList({ mac: mac, ip: ip }).then((res) => {
             deptList.value = res; // 将返回值赋给 deptList
             if (deptList.value.length > 0) {
               activeKey.value = 1; // 设置第一个标签为默认选中
+              console.log('科室id', JSON.stringify({ pkDept: deptList.value[0].pkDept, nameDept: deptList.value[0].nameDept }));
+              frame.SendDept(JSON.stringify({ pkDept: deptList.value[0].pkDept, nameDept: deptList.value[0].nameDept }));
             }
           });
         })
@@ -67,7 +69,7 @@
     <a-tabs v-model:activeKey="activeKey">
       <!-- 动态生成 a-tab-pane -->
       <a-tab-pane v-for="(dept, index) in deptList" :key="index + 1" :tab="dept.nameDept" force-render>
-        <tab-dept :deptId="dept.pkDept"/>
+        <tab-dept :deptId="dept.pkDept" />
       </a-tab-pane>
     </a-tabs>
   </div>

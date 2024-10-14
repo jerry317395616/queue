@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.business.his.mapper.HisMapper">
+
+
+    <select id="getPatientAppInfo" resultType="java.util.Map">
+        with dict as (select name, CODE
+                      from BD_DEFDOC
+                      where code_defdoclist = '020100')
+        select dict.NAME                             apptype,
+               sr.CODE,
+               appt.PK_SCHAPPT,
+               appt.PK_PI,
+               dept.CODE_DEPT,
+               appt.PK_SCHAPPT,
+               pm.NAME_PI,
+               pm.DT_SEX,
+               to_char(pm.BIRTH_DATE, 'yyyy-mm-dd')  BIRTH_DATE
+                ,
+               pm.MOBILE
+                ,
+               pm.ID_NO
+                ,
+               to_char(appt.DATE_APPT, 'yyyy-mm-dd') DATE_APPT
+        from SCH_APPT appt
+                 left join BD_OU_DEPT dept on dept.PK_DEPT = appt.PK_DEPT_EX
+                 left join PI_MASTER pm on pm.PK_PI = appt.PK_PI
+                 left join SCH_RESOURCE sr on sr.PK_SCHRES = appt.PK_SCHRES
+                 left join dict on dict.CODE = appt.DT_APPTYPE
+        where appt.EU_STATUS = '0'
+          and appt.DEL_FLAG = '0'
+          and appt.PK_PI = #{pkPi}
+
+          and to_char(appt.DATE_APPT, 'yyyy-mm-dd') = to_char(sysdate, 'yyyy-mm-dd')
+        order by appt.DATE_APPT desc
+    </select>
+</mapper>

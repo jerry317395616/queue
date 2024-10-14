@@ -1,6 +1,7 @@
 package org.jeecg.modules.api.service;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
+import org.jeecg.modules.api.CardUtil;
 import org.jeecg.modules.api.mapper.CardMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
