@@ -4,15 +4,13 @@ import { useMessage } from "/@/hooks/web/useMessage";
 const { createConfirm } = useMessage();
 
 enum Api {
-  list = '/api/doctor/getDoctorQueueList',
-  save='/queue/queues/add',
-  edit='/queue/queues/edit',
-  deleteOne = '/queue/queues/delete',
-  deleteBatch = '/queue/queues/deleteBatch',
-  importExcel = '/queue/queues/importExcel',
-  exportXls = '/queue/queues/exportXls',
-  deptList = '/business/client/getTriageClientInfo',
-  roomList = '/business/client/getRoomList',
+  list = '/client/tabTriageClient/list',
+  save='/client/tabTriageClient/add',
+  edit='/client/tabTriageClient/edit',
+  deleteOne = '/client/tabTriageClient/delete',
+  deleteBatch = '/client/tabTriageClient/deleteBatch',
+  importExcel = '/client/tabTriageClient/importExcel',
+  exportXls = '/client/tabTriageClient/exportXls',
 }
 
 /**
@@ -30,13 +28,7 @@ export const getImportUrl = Api.importExcel;
  * 列表接口
  * @param params
  */
-export const list = (params) => defHttp.post({ url: Api.list, params });
-
-// 获取护士站对应的科室
-export const getDeptList = (params) => defHttp.post({ url: Api.deptList, params });
-
-// 获取诊室信息
-export const getRoomList = (params) => defHttp.post({ url: Api.roomList, params });
+export const list = (params) => defHttp.get({ url: Api.list, params });
 
 /**
  * 删除单个

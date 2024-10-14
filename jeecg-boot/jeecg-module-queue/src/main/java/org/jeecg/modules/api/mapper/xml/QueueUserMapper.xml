@@ -55,8 +55,7 @@
             CASE
                 WHEN pa.gender = 1 THEN '男'
                 ELSE '女'
-                END AS gender,
-            TIMESTAMPDIFF(YEAR, pa.date_birth, CURDATE()) AS age
+                END AS gender
         FROM
             queues qu
                 LEFT JOIN

@@ -101,6 +101,7 @@
   const toggleSearchStatus = ref<boolean>(false);
   const registerModal = ref();
   const userStore = useUserStore();
+  const { createMessage } = useMessage();
   const deptId = userStore.getLoginInfo.departs[0].id;
   //注册table数据
   const { prefixCls, tableContext, onExportXls, onImportXls } = useListPage({
@@ -148,12 +149,15 @@
    * 同步事件
    */
   function handleSign(record: Recordable) {
-    console.log(JSON.stringify(record));
-    record.departName = record.nameDept;
+    console.log('科室信息',JSON.stringify(record));
+    record.departName = record.NAME_DEPT;
     record.departOrder = 0;
     record.orgCategory = '2';
     record.parentId = '6d35e179cd814e3299bd588ea7daed3f';
-    saveOrUpdate(record, false).then((res) => {});
+    record.memo = record.CODE_DEPT;
+    saveOrUpdate(record, false).then((res) => {
+      createMessage.success(res.message);
+    });
     // axios.post('/jeecgboot/api/sys/add-dept', { record }).then((res) => {
     //
     //

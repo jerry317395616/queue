@@ -155,7 +155,14 @@
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { useListPage } from '/@/hooks/system/useListPage';
   import { columns, superQuerySchema } from '../index.data';
-  import { list, deleteOne, batchDelete, getImportUrl, getExportUrl } from '../index.api';
+  import {
+    list,
+    deleteOne,
+    batchDelete,
+    getImportUrl,
+    getExportUrl,
+    getDeptList
+  } from '../index.api';
 
   import QueuesModal from './IndexModal.vue';
   import { useUserStore } from '/@/store/modules/user';
@@ -227,8 +234,18 @@
    * 新增事件
    */
   function handleAdd() {
-    registerModal.value.disableSubmit = false;
-    registerModal.value.add();
+    // registerModal.value.disableSubmit = false;
+    // registerModal.value.add();
+
+    const frame = chrome.webview.hostObjects.viewHost;
+    frame
+      .OpReadFrm()
+      .then((res) => {
+        console.log('res')
+      })
+      .catch((error) => {
+        console.error('Error retrieving MAC Address:', error);
+      });
   }
 
   /**

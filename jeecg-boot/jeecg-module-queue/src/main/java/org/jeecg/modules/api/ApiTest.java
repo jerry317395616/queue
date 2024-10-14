@@ -1011,6 +1011,7 @@ public class ApiTest {
         JSONObject paramObj = JSONObject.parseObject(param);
         String doctorId = paramObj.getString("doctorId");
         List<Map<String, Object>> result = queueUserMapper.getDoctorQueueList(doctorId);
+
         return Result.OK(result);
     }
 
@@ -1067,6 +1068,29 @@ public class ApiTest {
 
         }
         return Result.OK("");
+    }
+
+
+    @PostMapping("call-test")
+    public void callTest(@RequestBody String json){
+        JSONObject record = JSONObject.parseObject(json);
+        String id = record.getString("id");
+        Channel channel = WebSocketFrameHandler.clientIdChannelMap.get(id);
+        if (channel != null && channel.isActive()) {
+            // 向指定的客户端发送消息
+            channel.writeAndFlush(new TextWebSocketFrame("收到了"));
+
+        }
+    }
+
+    /**
+     * 获取护士站对应的科室信息
+     */
+    @PostMapping("getTriageDeptList")
+    public void getTriageDeptList(@RequestBody String json){
+        JSONObject param = JSONObject.parseObject(json);
+        String mac = param.getString("mac");
+
     }
 
 }

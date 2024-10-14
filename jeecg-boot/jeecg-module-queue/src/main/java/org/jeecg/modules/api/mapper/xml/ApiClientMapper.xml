@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.api.mapper.ApiClientMapper">
+
+
+    <select id="getDeptDoctorList" resultType="java.util.Map">
+        select dd.doctor, su.realname from doctor_device dd
+                                               left join sys_user su on su.id = dd.doctor
+        where dd.department = #{deptId}
+          and dd.status = '在线'
+    </select>
+</mapper>

@@ -9,6 +9,10 @@
                pi.id_no credentialNo,
                cr.name_reg regName,
                cr.dt_sex sex,
+               CASE
+                   WHEN cr.dt_sex = '02' THEN '男'
+                   ELSE '女'
+                   END AS gender,
                cr.birth_day birthDay,
                cr.tel_no teleNo,
                cr.mpi mpi,
@@ -18,10 +22,13 @@
                cr.postcode postCode,
                cc.card_no cardNo,
                cc.status cardStatus,
-               cc.create_time createtime
+               acc.AMT_ACC,
+               pi.NAME_PI,
+               FLOOR(MONTHS_BETWEEN(SYSDATE, TO_DATE(SUBSTR(pi.id_no, 7, 8), 'YYYYMMDD')) / 12) AS age
         FROM card_reginfo cr
                  left join VIEW_HIS_PI_MASTER pi on cr.pk_pi = pi.pk_pi
                  left join card_e_card cc on cr.pk_reginfo = cc.pk_reginfo
+                 left join PSC_PI_ACC acc on acc.PK_PI = cr.PK_PI and acc.DEL_FLAG = '0'
         where cc.card_no =  #{cardNo}
 
     </select>
