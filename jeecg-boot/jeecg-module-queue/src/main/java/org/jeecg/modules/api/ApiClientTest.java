@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/client")
 public class ApiClientTest {
 
+
+
     @Autowired
     private IDoctorDeviceService doctorDeviceService;
 

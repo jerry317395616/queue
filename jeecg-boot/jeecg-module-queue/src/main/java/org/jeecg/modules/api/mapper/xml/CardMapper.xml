@@ -5,6 +5,8 @@
 
     <select id="getCardNo" resultType="java.util.Map">
 
+
+
         SELECT cr.code_reg cardRegCode,
                pi.id_no credentialNo,
                cr.name_reg regName,

@@ -12,6 +12,8 @@ public interface HisPatientMapper {
 
     List<Map<String, Object>> getAppPatients(@Param("code") String code);
 
+
+
     /**
      * 获取患者当天挂号信息
      * @param pkPi

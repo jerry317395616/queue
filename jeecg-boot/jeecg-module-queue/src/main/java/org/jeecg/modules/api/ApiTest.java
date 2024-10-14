@@ -642,6 +642,8 @@ public class ApiTest {
             return Result.error("没有查询到预约信息");
         }
 
+
+
         Date checkDate = new Date();
         String namePi = appList.get(0).get("NAME_PI").toString();
         String dtSex = appList.get(0).get("DT_SEX").toString();

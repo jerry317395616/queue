@@ -10,6 +10,8 @@
                  left join PI_MASTER pm on pm.PK_PI = sa.PK_PI
         where sr.CODE = #{code}
     </select>
+
+
     <select id="getAppPatientByPkPi" resultType="java.util.Map">
         with dict as (select name, CODE
                       from BD_DEFDOC

@@ -21,6 +21,8 @@ public class CryptoUtil {
         }
         try {
 
+
+
             String dd = decode16(null, obj.toString());
             System.out.println("decode:" + dd);
             return decode16(null, obj.toString());
